@@ -724,7 +724,7 @@ type mockDeployment struct {
 	}
 }
 
-func (m *mockDeployment) SelectServer(ctx context.Context, desc description.ServerSelector) (Server, error) {
+func (m *mockDeployment) SelectServer(_ context.Context, desc description.ServerSelector) (Server, error) {
 	m.params.selector = desc
 	return m.returns.server, m.returns.err
 }
@@ -740,7 +740,6 @@ func (m *mockServerSelector) SelectServer(description.Topology, []description.Se
 type mockConnection struct {
 	// parameters
 	pWriteWM []byte
-	pReadDst []byte
 
 	// returns
 	rWriteErr     error
@@ -770,8 +769,7 @@ func (m *mockConnection) WriteWireMessage(_ context.Context, wm []byte) error {
 	return m.rWriteErr
 }
 
-func (m *mockConnection) ReadWireMessage(_ context.Context, dst []byte) ([]byte, error) {
-	m.pReadDst = dst
+func (m *mockConnection) ReadWireMessage(_ context.Context) ([]byte, error) {
 	return m.rReadWM, m.rReadErr
 }
 
